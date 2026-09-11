@@ -341,10 +341,12 @@ MonoBehaviour:
     _keyName: CanJump
   _isMovingKey:
     _keyName: IsMoving
-  _walkSpeed: 5
+  _walkSpeed: 3
   _sprintMultiplier: 1.5
-  _jumpHeight: 3
+  _jumpHeight: 0.75
   _gravity: -9.81
+  _airControlMultiplier: 2
+  _acceleration: 15
 --- !u!114 &113076077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1322,7 +1324,7 @@ MonoBehaviour:
     _keyName: IsLocked
   _isOpenedKey:
     _keyName: IsOpened
-  _speed: 125
+  _speed: 150
   _hingeAngle: 90
   _isInwards: 1
   _respectDebounce: 1
