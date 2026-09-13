@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(EntityBlackboard))]
+[RequireComponent(typeof(NavMeshObstacle))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Collider))]
 public class DoorController : MonoBehaviour, IInteractable
@@ -21,8 +23,12 @@ public class DoorController : MonoBehaviour, IInteractable
     [SerializeField] private AudioClip _doorOpenClip;
     [SerializeField] private AudioClip _doorCloseClip;
 
+    [Space(10)]
+    [SerializeField] private Transform _UiAnchor;
+
     private EntityBlackboard _entityBlackboard;
     private AudioSource _audioSource;
+    private NavMeshObstacle _navMeshObstacle;
 
     private bool _inDebounce;
     private Quaternion _closedRotation;
@@ -33,6 +39,7 @@ public class DoorController : MonoBehaviour, IInteractable
     {
         _entityBlackboard = GetComponent<EntityBlackboard>();
         _audioSource = GetComponent<AudioSource>();
+        _navMeshObstacle = GetComponent<NavMeshObstacle>();
 
         _inDebounce = false;
 
@@ -59,6 +66,45 @@ public class DoorController : MonoBehaviour, IInteractable
         transform.localRotation = Quaternion.RotateTowards(transform.localRotation, _targetRotation, _speed * Time.deltaTime);
     }
 
+    private void OnDestroy() => _entityBlackboard.UnregisterCallback(_isOpenedKey, OnOpenStateChanged);
+
+    public void Interact()
+    {
+        if (_respectDebounce && _inDebounce)
+            return;
+
+        if (_entityBlackboard.TryGet(_isLockedKey, out bool isLocked) && isLocked)
+        {
+            _audioSource.PlayOneShot(_doorLockClip);
+            return;
+        }
+
+        if (_entityBlackboard.TryGet(_isOpenedKey, out bool isOpened))
+        {
+            bool newState = !isOpened;
+            _entityBlackboard.Set(_isOpenedKey, newState);
+        }
+
+        if (_respectDebounce)
+            HandleDebounce().Forget();
+    }
+
+    public string Description()
+    {
+        if (_entityBlackboard.TryGet(_isLockedKey, out bool isLocked) && isLocked)
+            return "Locked";
+
+        if (_entityBlackboard.TryGet(_isOpenedKey, out bool isOpened))
+            return isOpened ? "Close" : "Open";
+
+        return "Interact";
+    }
+
+    public Transform GetUIAnchorPosition()
+    {
+        return _UiAnchor != null ? _UiAnchor : transform;
+    }
+
     private async UniTaskVoid HandleDebounce()
     {
         _inDebounce = true;
@@ -74,11 +120,10 @@ public class DoorController : MonoBehaviour, IInteractable
         if (_entityBlackboard.TryGet(_isOpenedKey, out bool isOpened))
         {
             _targetRotation = isOpened ? _openRotation : _closedRotation;
+            _navMeshObstacle.carving = !isOpened;
             _audioSource.PlayOneShot(isOpened ? _doorOpenClip : _doorCloseClip);
         }
     }
-
-    private void OnDestroy() => _entityBlackboard.UnregisterCallback(_isOpenedKey, OnOpenStateChanged);
 
     private void OnDrawGizmosSelected()
     {
@@ -105,26 +150,5 @@ public class DoorController : MonoBehaviour, IInteractable
 
         Vector3 rightFlank = arrowTip + transform.right * 0.1f - transform.forward * 0.1f;
         Gizmos.DrawLine(rightFlank, arrowTip);
-    }
-
-    public void Interact()
-    {
-        if (_respectDebounce && _inDebounce)
-            return;
-
-        if (_entityBlackboard.TryGet(_isLockedKey, out bool isLocked) && isLocked)
-        {
-            _audioSource.PlayOneShot(_doorLockClip);
-            return;
-        }
-
-        if (_entityBlackboard.TryGet(_isOpenedKey, out bool isOpened))
-        {
-            bool newState = !isOpened;
-            _entityBlackboard.Set(_isOpenedKey, newState);
-        }
-
-        if (_respectDebounce)
-            HandleDebounce().Forget();
     }
 }

@@ -1,0 +1,12 @@
+.reticle {
+    left: 50%;
+    right: 50%;
+    top: 50%;
+    bottom: 50%;
+    width: var(--length-xs);
+    height: var(--length-xs);
+    aspect-ratio: 1;
+    background-color: var(--color-bg-light);
+    border-width: 0.5px;
+    border-color: var(--color-bg-dark);
+}

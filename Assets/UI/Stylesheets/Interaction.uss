@@ -1,0 +1,79 @@
+VisualElement {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    position: absolute;
+    background-color: var(--color-bg-dark-alpha);
+    right: var(--length-md);
+    bottom: var(--length-md);
+    height: 32px;
+    aspect-ratio: 6;
+    flex-direction: row;
+    align-items: center;
+    padding-left: var(--length-xs);
+    opacity: 0;
+    scale: 0.95;
+    transition-property: opacity, scale;
+    transition-duration: 0.1s, 0.1s;
+    transition-timing-function: ease-out, ease-out;
+}
+
+.container.visible {
+    opacity: 1;
+    scale: 1;
+}
+
+.key-container {
+    background-color: var(--color-bg-light);
+    margin-right: var(--length-xs);
+    width: var(--length-lg);
+    height: var(--length-lg);
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--length-xs);
+    scale: 1;
+    transition-property: scale, background-color;
+    transition-duration: 0.05s, 0.05s;
+}
+
+.key-container.pressed {
+    scale: 0.95;
+    background-color: var(--color-bg-light-alpha);
+}
+
+.text-container {
+    justify-content: center;
+    height: 100%;
+}
+
+.key-text {
+    font-size: var(--text-md);
+    color: var(--color-text-dark);
+}
+
+.description-text {
+    font-size: var(--text-md);
+    color: var(--color-text-main);
+}
+
+.floating-key {
+    position: absolute;
+    translate: -50% -50%; 
+    opacity: 0;
+    scale: 0.95;
+    transition-property: opacity, scale;
+    transition-duration: 0.1s, 0.1s;
+    transition-timing-function: ease-out, ease-out;
+}
+
+.floating-key.visible {
+    opacity: 1;
+    scale: 1;
+}
+
+.floating-key.pressed {
+    scale: 0.95;
+    background-color: var(--color-bg-light-alpha);
+}

@@ -1,0 +1,15 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Stylesheets/Global.uss?fileID=7433441132597879392&amp;guid=504e4533d1b17edafb3ddc10a198b78a&amp;type=3#Global"/>
+    <Style src="project://database/Assets/UI/Stylesheets/Interaction.uss?fileID=7433441132597879392&amp;guid=4e810cf44f06efd71bf12f241ee39553&amp;type=3#Interaction"/>
+    <ui:VisualElement name="container" class="dark-background-transparent container">
+        <ui:VisualElement name="key-container" class="key-container">
+            <ui:Label name="key" text="E" class="key-text bold text-center"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="text-container">
+            <ui:Label name="description" text="Interact" class="description-text bold text-left"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="floating-key-container" class="key-container floating-key">
+        <ui:Label name="floating-key" text="E" class="key-text bold text-center"/>
+    </ui:VisualElement>
+</ui:UXML>

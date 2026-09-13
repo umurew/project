@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SceneBlackboard", menuName = "Scriptable Objects/Scene Blackboard")]
-public class SceneBlackboard : ScriptableObject
+[CreateAssetMenu(fileName = "SequenceBlackboard", menuName = "Scriptable Objects/Sequence Blackboard")]
+public class SequenceBlackboard : ScriptableObject
 {
     public interface IStorage { }
 
@@ -57,7 +57,7 @@ public class SceneBlackboard : ScriptableObject
         return storage.Values.TryGetValue(key.Hash, out result);
     }
 
-    public void Listen(BlackboardKey key, Action callback)
+    public void RegisterCallback(BlackboardKey key, Action callback)
     {
         int hash = key.Hash;
         if (!_events.ContainsKey(hash))
@@ -67,7 +67,7 @@ public class SceneBlackboard : ScriptableObject
         _events[hash] += callback;
     }
 
-    public void StopListening(BlackboardKey key, Action callback)
+    public void UnregisterCallback(BlackboardKey key, Action callback)
     {
         if (_events.ContainsKey(key.Hash))
         {
@@ -92,16 +92,16 @@ public class SceneBlackboard : ScriptableObject
         {
             if (TryGet(key, out T updatedValue) && EqualityComparer<T>.Default.Equals(updatedValue, expectedValue))
             {
-                StopListening(key, OnStateChanged);
+                UnregisterCallback(key, OnStateChanged);
                 utcs.TrySetResult(updatedValue);
             }
         }
 
-        Listen(key, OnStateChanged);
+        RegisterCallback(key, OnStateChanged);
 
         using (cancellationToken.Register(() =>
         {
-            StopListening(key, OnStateChanged);
+            UnregisterCallback(key, OnStateChanged);
             utcs.TrySetCanceled(cancellationToken);
         }))
         {

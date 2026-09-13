@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(SampleSequence))]
 public class Bootstrapper : MonoBehaviour
 {
     [Header("References")]
@@ -10,25 +12,25 @@ public class Bootstrapper : MonoBehaviour
     [Space(10)]
     [SerializeField] private InputProvider _inputProviderPrefab;
 
-    private SceneBlackboard _sceneBlackboard;
     private InputProvider _inputProvider;
 
-    private void Awake()
+    private async UniTaskVoid Awake()
     {
-        _sceneBlackboard = ScriptableObject.CreateInstance<SceneBlackboard>();
-
         _inputProvider = Instantiate(_inputProviderPrefab, transform);
         _inputProvider.Construct();
         _inputProvider.EnablePlayerControls();
 
-        if (!_player.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
-            throw new NullReferenceException("Couldn't get PlayerMovement from Player.");
+        if (_player.TryGetComponent<PlayerController>(out PlayerController playerController))
+            playerController.Construct(_inputProvider, _mainCamera);
         else
-            playerMovement.Construct(_inputProvider, _mainCamera);
+            throw new NullReferenceException("Couldn't get PlayerController from Player.");
 
-        if (!_player.TryGetComponent<PlayerInteraction>(out PlayerInteraction playerInteraction))
-            throw new NullReferenceException("Couldn't get PlayerInteraction from Player.");
+        if (_player.TryGetComponent<InteractionController>(out InteractionController interactionController))
+            interactionController.Construct(_inputProvider, _mainCamera);
         else
-            playerInteraction.Construct(_inputProvider, _mainCamera);
+            throw new NullReferenceException("Couldn't get InteractionController from Player.");
+
+        SampleSequence sampleSequence = GetComponent<SampleSequence>();
+        await sampleSequence.ExecuteAsync();
     }
 }

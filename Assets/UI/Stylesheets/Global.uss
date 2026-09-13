@@ -1,0 +1,27 @@
+:root {
+    --color-bg-dark: rgb(20, 20, 20);
+    --color-bg-dark-alpha: rgba(20, 20, 20, 0.45);
+    --color-bg-light: rgb(255, 255, 255);
+    --color-bg-light-alpha: rgba(255, 255, 255, 0.45);
+    --color-text-main: rgb(245, 245, 245);
+    --color-text-muted: rgb(160, 160, 160);
+    --color-accent: rgb(255, 204, 0);
+    --length-xs: 4px;
+    --length-sm: 8px;
+    --length-md: 16px;
+    --length-lg: 24px;
+    --length-xl: 32px;
+    --text-sm: 12px;
+    --text-md: 16px;
+    --text-lg: 24px;
+    --text-xl: 32px;
+}
+
+.bold { -unity-font-style: bold; }
+.italic { -unity-font-style: italic; }
+.text-center { -unity-text-align: middle-center; }
+.text-left { -unity-text-align: middle-left; }
+.text-wrap { white-space: normal; }
+.row { flex-direction: row; }
+.col { flex-direction: column; }
+.center-all { align-items: center; justify-content: center; }

@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Stylesheets/Global.uss?fileID=7433441132597879392&amp;guid=504e4533d1b17edafb3ddc10a198b78a&amp;type=3#Global"/>
+    <Style src="project://database/Assets/UI/Stylesheets/Reticle.uss?fileID=7433441132597879392&amp;guid=af610475fa583dfd4ae375fb7cef7eaf&amp;type=3#Reticle"/>
+    <ui:VisualElement class="reticle"/>
+</ui:UXML>
